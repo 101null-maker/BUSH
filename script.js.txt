@@ -1,0 +1,30 @@
+(function () {
+  var countEl = document.getElementById('count');
+  var bushesEl = document.getElementById('bushes');
+  var btn = document.getElementById('btn');
+  var nameEl = document.getElementById('name');
+  var running = false;
+
+  // Name can also be set from the link: ...index.html?name=Ali
+  try {
+    var q = new URLSearchParams(location.search).get('name');
+    if (q) nameEl.value = q.slice(0, 30);
+  } catch (e) {}
+
+  btn.addEventListener('click', function () {
+    if (running) return;
+    running = true;
+    var n = 0;
+    bushesEl.textContent = '';
+    var timer = setInterval(function () {
+      n = Math.min(n + 23, 1000);
+      countEl.textContent = n;
+      if (bushesEl.textContent.length < 120) bushesEl.textContent += '\uD83C\uDF3F';
+      if (n >= 1000) {
+        clearInterval(timer);
+        running = false;
+        btn.textContent = 'Count them again';
+      }
+    }, 25);
+  });
+})();
