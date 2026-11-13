@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>An Official Letter About Your Bushes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --hedge: #2f5d34;
+    --hedge-dark: #1f4024;
+    --paper: #fbfbf7;
+    --ink: #1c2420;
+    --stamp: #b3261e;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    min-height: 100vh;
+    padding: 32px 16px 64px;
+    color: var(--ink);
+    font-family: "Special Elite", "Courier New", monospace;
+    background:
+      radial-gradient(circle at 20% 30%, #3a7040 0 18px, transparent 19px) 0 0 / 60px 60px,
+      radial-gradient(circle at 70% 70%, #264d2b 0 22px, transparent 23px) 0 0 / 80px 80px,
+      var(--hedge);
+  }
+  .letter {
+    position: relative;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 48px 40px 56px;
+    background: var(--paper);
+    border-radius: 3px;
+    box-shadow: 0 12px 40px rgba(0,0,0,.45);
+    line-height: 1.7;
+    font-size: 1.05rem;
+  }
+  .stamp {
+    position: absolute;
+    top: 28px; right: 24px;
+    transform: rotate(8deg);
+    border: 3px solid var(--stamp);
+    color: var(--stamp);
+    padding: 6px 12px;
+    font-size: .8rem;
+    line-height: 1.2;
+    text-align: center;
+    opacity: .85;
+  }
+  h1 {
+    margin: 0 0 4px;
+    font-size: 1.5rem;
+    font-weight: normal;
+    max-width: 70%;
+  }
+  .from { margin: 0 0 32px; font-size: .9rem; color: #55605a; }
+  .name-input {
+    font: inherit;
+    border: 0;
+    border-bottom: 2px dashed var(--hedge);
+    background: transparent;
+    color: inherit;
+    width: 12ch;
+    padding: 0 2px;
+  }
+  .name-input:focus-visible { outline: 3px solid var(--hedge); outline-offset: 2px; }
+  p { margin: 0 0 1.1em; }
+  .counter {
+    margin: 28px 0;
+    padding: 18px;
+    text-align: center;
+    background: #eaf3e6;
+    border: 2px solid var(--hedge);
+  }
+  .count { display: block; font-size: 3rem; line-height: 1; color: var(--hedge-dark); }
+  .bushes { min-height: 2.2em; font-size: 1.1rem; word-break: break-all; margin-top: 8px; }
+  button {
+    font: inherit;
+    margin-top: 12px;
+    padding: 10px 18px;
+    border: 2px solid var(--hedge-dark);
+    background: var(--hedge);
+    color: #fff;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+  button:hover { background: var(--hedge-dark); }
+  button:focus-visible { outline: 3px solid #000; outline-offset: 2px; }
+  .sign { font-family: "Caveat", cursive; font-size: 2rem; margin: 24px 0 0; }
+  .ps { margin-top: 28px; font-size: .95rem; color: #55605a; }
+  @media (max-width: 520px) {
+    .letter { padding: 32px 22px 40px; }
+    h1 { max-width: 100%; margin-top: 44px; }
+    .stamp { top: 14px; right: 14px; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .stamp { animation: thunk .5s ease-out both; }
+    @keyframes thunk { from { transform: rotate(8deg) scale(2); opacity: 0; } }
+  }
+</style>
+</head>
+<body>
+  <main class="letter">
+    <div class="stamp">CERTIFIED<br>BUSH INCIDENT</div>
+
+    <h1>Official Notice Regarding Your Recent Bush Situation</h1>
+    <p class="from">From: The Department of Shrubbery &amp; Hedge Affairs</p>
+
+    <p>Dear <input class="name-input" id="name" value="my friend" aria-label="Friend's name" maxlength="30">,</p>
+
+    <p>It has come to our attention that you got absolutely fucked by a thousand bushes.</p>
+
+    <p>We have reviewed the footage. It was not a fair fight. You went in with confidence and came out with leaves in places leaves should never be.</p>
+
+    <div class="counter">
+      <span class="count" id="count">0</span>
+      bushes involved
+      <div class="bushes" id="bushes" aria-hidden="true"></div>
+      <button id="btn" type="button">Count the bushes</button>
+    </div>
+
+    <p>The bushes have been spoken to. They are not sorry.</p>
+
+    <p>Please accept this letter as our official condolences. Rest, hydrate, and stay at least 10 metres away from all hedges until further notice.</p>
+
+    <p class="sign">With deepest sympathy,<br>The Bushes (all 1000)</p>
+
+    <p class="ps">P.S. You know it's a joke. Come outside, I'll buy you food.</p>
+  </main>
+
+<script>
+  (function () {
+    var countEl = document.getElementById('count');
+    var bushesEl = document.getElementById('bushes');
+    var btn = document.getElementById('btn');
+    var nameEl = document.getElementById('name');
+    var running = false;
+
+    // Name can also be set from the link: ...index.html?name=Ali
+    try {
+      var q = new URLSearchParams(location.search).get('name');
+      if (q) nameEl.value = q.slice(0, 30);
+    } catch (e) {}
+
+    btn.addEventListener('click', function () {
+      if (running) return;
+      running = true;
+      var n = 0;
+      bushesEl.textContent = '';
+      var timer = setInterval(function () {
+        n = Math.min(n + 23, 1000);
+        countEl.textContent = n;
+        if (bushesEl.textContent.length < 120) bushesEl.textContent += '\uD83C\uDF3F';
+        if (n >= 1000) {
+          clearInterval(timer);
+          running = false;
+          btn.textContent = 'Count them again';
+        }
+      }, 25);
+    });
+  })();
+</script>
+</body>
+</html>
